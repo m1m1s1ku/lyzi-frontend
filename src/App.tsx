@@ -14,8 +14,7 @@ function App() {
           <span>Amount :</span>
           <input type="number" onInput={(e) => {
             setAmount(parseFloat((e.target as HTMLInputElement).value));
-          }}></input>
-          Amount: {amount}
+          }}></input>€
         </p>
       </div>
       <div>
@@ -27,15 +26,17 @@ function App() {
         </div>
         {paymentMode === 0 ? <div>
           <h4>Transfer</h4>
-          <div>Send to FR76 1000 1000 1000 1000</div>
+          <div>Send {amount}€ to FR76 1000 1000 1000 1000</div>
         </div> : <div></div>}
         {paymentMode === 1 ? <div>
           <h4>Card</h4>
+          <p>Amount : {amount}€</p>
           <label>Card number </label>
           <input type="text"></input>
         </div> : <div></div>}
         {paymentMode === 2 ? <div>
           <h4>Crypto</h4>
+          <p>Amount : {amount}€</p>
           <div>Send to wallet 1Lbcfr7sAHTD9CgdQo3HTMTkV8LK4ZnX71</div>
           <button onClick={() => {
             setTimeout(() => {
