@@ -1,22 +1,7 @@
 import { useState } from 'react'
 import './App.css'
+import { PaymentMode, paymentNameByMode } from './utils/paymentMode';
 
-enum PaymentMode {
-  Transfer = 0,
-  Card = 1,
-  Crypto = 2
-}
-
-function paymentNameByMode(mode: PaymentMode) {
-  switch(mode) {
-    case PaymentMode.Transfer:
-      return "Transfer";
-    case PaymentMode.Card:
-      return "Card";
-    case PaymentMode.Crypto:
-      return "Crypto";
-  }
-}
 
 function App() {
   const [amount, setAmount] = useState(0);
@@ -56,6 +41,14 @@ function App() {
     }, 1000);
   }
 
+  const onInputAmount = (amount: number) => {
+    if(!amount || isNaN(amount)) {
+      setInvalidAmount(true);
+      return;
+    }
+    setAmount(amount);
+  }
+
   return (
     <>
       <h1>Lyzi payment</h1>
@@ -63,19 +56,16 @@ function App() {
         <p>
           <span>Amount: </span>
           <input type="number" onInput={(e) => {
+            setPaymentConfirm(false);
             setInvalidAmount(false);
             const amount = parseFloat((e.target as HTMLInputElement).value);
-            if(!amount || isNaN(amount)) {
-              setInvalidAmount(true);
-              return;
-            }
-            setAmount(amount);
+            onInputAmount(amount);
           }}></input>€
           {invalidAmount ? <div className="invalid">Invalid amount</div> : <div></div>}
         </p>
       </div>
       <div>
-        <h3>Payment options :</h3>
+        <h3>Options :</h3>
         <div>
           <button onClick={() => onChangeMode(PaymentMode.Transfer)}>Transfer</button>
           <button onClick={() => onChangeMode(PaymentMode.Card)}>Card</button>
