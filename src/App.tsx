@@ -41,7 +41,7 @@ function App() {
           <button onClick={() => {
             setTimeout(() => {
               setPaymentConfirm(true);
-            }, 500);
+            }, 1000);
           }}>Confirm</button>
           {paymentConfirm ? <div>Confirm received</div> : <div></div>}
         </div> : <div></div>}
