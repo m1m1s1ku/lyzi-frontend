@@ -43,7 +43,12 @@ function App() {
           <span>Amount: </span>
           <input type="number" onInput={(e) => {
             setInvalidAmount(false);
-            setAmount(parseFloat((e.target as HTMLInputElement).value));
+            const amount = parseFloat((e.target as HTMLInputElement).value);
+            if(!amount || isNaN(amount)) {
+              setInvalidAmount(true);
+              return;
+            }
+            setAmount(amount);
           }}></input>€
           {invalidAmount ? <div className="invalid">Invalid amount</div> : <div></div>}
         </p>
