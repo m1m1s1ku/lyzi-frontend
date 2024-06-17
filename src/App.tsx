@@ -20,12 +20,12 @@ function paymentNameByMode(mode: PaymentMode) {
 
 function App() {
   const [amount, setAmount] = useState(0);
-  const [paymentMode, setPaymentMode] = useState(0);
+  const [paymentMode, setPaymentMode] = useState(PaymentMode.Transfer);
   const [paymentConfirm, setPaymentConfirm] = useState(false);
   const [invalidAmount, setInvalidAmount] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [finalAmount, setFinalAmount] = useState(0);
-  const [finalPaymentMode, setFinalPaymentMode] = useState(0);
+  const [finalPaymentMode, setFinalPaymentMode] = useState(PaymentMode.Transfer);
 
   const onConfirm = (amount: number, mode: PaymentMode) => {
     setPaymentConfirm(false);
