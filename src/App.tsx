@@ -13,8 +13,9 @@ function App() {
   const [paymentConfirm, setPaymentConfirm] = useState(false);
   const [invalidAmount, setInvalidAmount] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [finalAmount, setFinalAmount] = useState(0);
 
-  const onConfirm = () => {
+  const onConfirm = (amount: number) => {
     setPaymentConfirm(false);
     setIsLoading(true);
     if(!amount || isNaN(amount)) {
@@ -24,10 +25,7 @@ function App() {
       return;
     }
 
-    setTimeout(() => {
-      setPaymentConfirm(true);
-      setIsLoading(false);
-    }, 1000);
+    onConfirmReceived(amount);
   }
 
   const onChangeMode = (mode: PaymentMode) => {
@@ -35,10 +33,18 @@ function App() {
     setPaymentMode(mode);
   }
 
+  const onConfirmReceived = (amount: number) => {
+    setTimeout(() => {
+      setFinalAmount(amount);
+      setIsLoading(false);
+      setPaymentConfirm(true);
+    }, 1000);
+  }
+
   return (
     <>
       <h1>Lyzi payment</h1>
-      <div className="card">
+      <div className="payment-form">
         <p>
           <span>Amount: </span>
           <input type="number" onInput={(e) => {
@@ -74,9 +80,9 @@ function App() {
           <div>Send to wallet 1Lbcfr7sAHTD9CgdQo3HTMTkV8LK4ZnX71</div>
         </div> : <div></div>}
 
-        <button onClick={onConfirm}>Confirm payment</button>
+        <button onClick={() => onConfirm(amount)}>Confirm payment</button>
         {isLoading ? <div>Loading...</div> : <div></div>}
-        {paymentConfirm ? <div className="valid">Confirm received</div> : <div></div>}
+        {paymentConfirm ? <div className="valid">Confirm received : {finalAmount}€</div> : <div></div>}
       </div>
     </>
   )
