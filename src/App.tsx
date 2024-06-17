@@ -7,6 +7,17 @@ enum PaymentMode {
   Crypto = 2
 }
 
+function paymentNameByMode(mode: PaymentMode) {
+  switch(mode) {
+    case 0:
+      return "Transfer";
+    case 1:
+      return "Card";
+    case 2:
+      return "Crypto";
+  }
+}
+
 function App() {
   const [amount, setAmount] = useState(0);
   const [paymentMode, setPaymentMode] = useState(0);
@@ -14,8 +25,9 @@ function App() {
   const [invalidAmount, setInvalidAmount] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [finalAmount, setFinalAmount] = useState(0);
+  const [finalPaymentMode, setFinalPaymentMode] = useState(0);
 
-  const onConfirm = (amount: number) => {
+  const onConfirm = (amount: number, mode: PaymentMode) => {
     setPaymentConfirm(false);
     setIsLoading(true);
     if(!amount || isNaN(amount)) {
@@ -25,7 +37,7 @@ function App() {
       return;
     }
 
-    onConfirmReceived(amount);
+    onConfirmReceived(amount, mode);
   }
 
   const onChangeMode = (mode: PaymentMode) => {
@@ -33,9 +45,12 @@ function App() {
     setPaymentMode(mode);
   }
 
-  const onConfirmReceived = (amount: number) => {
+  const onConfirmReceived = (amount: number, mode: PaymentMode) => {
+    setFinalPaymentMode(mode);
+    setFinalAmount(amount);
+    
+    // Simulate an API Call
     setTimeout(() => {
-      setFinalAmount(amount);
       setIsLoading(false);
       setPaymentConfirm(true);
     }, 1000);
@@ -80,9 +95,9 @@ function App() {
           <div>Send to wallet 1Lbcfr7sAHTD9CgdQo3HTMTkV8LK4ZnX71</div>
         </div> : <div></div>}
 
-        <button onClick={() => onConfirm(amount)}>Confirm payment</button>
+        <button onClick={() => onConfirm(amount, paymentMode)}>Confirm payment</button>
         {isLoading ? <div>Loading...</div> : <div></div>}
-        {paymentConfirm ? <div className="valid">Confirm received : {finalAmount}€</div> : <div></div>}
+        {paymentConfirm ? <div className="valid">Confirm received : {finalAmount}€ by {paymentNameByMode(finalPaymentMode)}</div> : <div></div>}
       </div>
     </>
   )
