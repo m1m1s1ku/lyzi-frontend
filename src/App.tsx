@@ -12,6 +12,19 @@ function App() {
   const [finalAmount, setFinalAmount] = useState(0);
   const [finalPaymentMode, setFinalPaymentMode] = useState(PaymentMode.Transfer);
 
+  const onInputAmount = (amount: number) => {
+    if(!amount || isNaN(amount)) {
+      setInvalidAmount(true);
+      return;
+    }
+    setAmount(amount);
+  }
+
+  const onChangeMode = (mode: PaymentMode) => {
+    setPaymentConfirm(false);
+    setPaymentMode(mode);
+  }
+
   const onConfirm = (amount: number, mode: PaymentMode) => {
     setPaymentConfirm(false);
     setIsLoading(true);
@@ -25,11 +38,6 @@ function App() {
     onConfirmReceived(amount, mode);
   }
 
-  const onChangeMode = (mode: PaymentMode) => {
-    setPaymentConfirm(false);
-    setPaymentMode(mode);
-  }
-
   const onConfirmReceived = (amount: number, mode: PaymentMode) => {
     setFinalPaymentMode(mode);
     setFinalAmount(amount);
@@ -39,14 +47,6 @@ function App() {
       setIsLoading(false);
       setPaymentConfirm(true);
     }, 1000);
-  }
-
-  const onInputAmount = (amount: number) => {
-    if(!amount || isNaN(amount)) {
-      setInvalidAmount(true);
-      return;
-    }
-    setAmount(amount);
   }
 
   return (
