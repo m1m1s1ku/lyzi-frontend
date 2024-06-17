@@ -12,16 +12,20 @@ function App() {
   const [paymentMode, setPaymentMode] = useState(0);
   const [paymentConfirm, setPaymentConfirm] = useState(false);
   const [invalidAmount, setInvalidAmount] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const onConfirm = () => {
+    setIsLoading(true);
     if(!amount || isNaN(amount)) {
       setInvalidAmount(true);
       setPaymentConfirm(false);
+      setIsLoading(false);
       return;
     }
 
     setTimeout(() => {
       setPaymentConfirm(true);
+      setIsLoading(false);
     }, 1000);
   }
 
@@ -48,22 +52,21 @@ function App() {
         {paymentMode === PaymentMode.Transfer ? <div>
           <h4>Transfer</h4>
           <div>Send {amount}€ to FR76 1000 1000 1000 1000</div>
-          <button onClick={onConfirm}>Confirm</button>
         </div> : <div></div>}
         {paymentMode === PaymentMode.Card ? <div>
           <h4>Card</h4>
           <p>Amount : {amount}€</p>
           <label>Card number </label>
           <input type="text"></input>
-          <button onClick={onConfirm}>Confirm</button>
         </div> : <div></div>}
         {paymentMode === PaymentMode.Crypto ? <div>
           <h4>Crypto</h4>
           <p>Amount : {amount}€</p>
           <div>Send to wallet 1Lbcfr7sAHTD9CgdQo3HTMTkV8LK4ZnX71</div>
-          <button onClick={onConfirm}>Confirm</button>
         </div> : <div></div>}
 
+        <button onClick={onConfirm}>Confirm</button>
+        {isLoading ? <div>Loading...</div> : <div></div>}
         {paymentConfirm ? <div className="valid">Confirm received</div> : <div></div>}
       </div>
     </>
