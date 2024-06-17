@@ -15,6 +15,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
 
   const onConfirm = () => {
+    setPaymentConfirm(false);
     setIsLoading(true);
     if(!amount || isNaN(amount)) {
       setInvalidAmount(true);
@@ -27,6 +28,11 @@ function App() {
       setPaymentConfirm(true);
       setIsLoading(false);
     }, 1000);
+  }
+
+  const onChangeMode = (mode: PaymentMode) => {
+    setPaymentConfirm(false);
+    setPaymentMode(mode);
   }
 
   return (
@@ -45,9 +51,9 @@ function App() {
       <div>
         <h3>Payment options :</h3>
         <div>
-          <button onClick={() => setPaymentMode(PaymentMode.Transfer)}>Transfer</button>
-          <button onClick={() => setPaymentMode(PaymentMode.Card)}>Card</button>
-          <button onClick={() => setPaymentMode(PaymentMode.Crypto)}>Crypto</button>
+          <button onClick={() => onChangeMode(PaymentMode.Transfer)}>Transfer</button>
+          <button onClick={() => onChangeMode(PaymentMode.Card)}>Card</button>
+          <button onClick={() => onChangeMode(PaymentMode.Crypto)}>Crypto</button>
         </div>
         {paymentMode === PaymentMode.Transfer ? <div>
           <h4>Transfer</h4>
@@ -56,8 +62,6 @@ function App() {
         {paymentMode === PaymentMode.Card ? <div>
           <h4>Card</h4>
           <p>Amount : {amount}€</p>
-          <label>Card number </label>
-          <input type="text"></input>
         </div> : <div></div>}
         {paymentMode === PaymentMode.Crypto ? <div>
           <h4>Crypto</h4>
@@ -65,7 +69,7 @@ function App() {
           <div>Send to wallet 1Lbcfr7sAHTD9CgdQo3HTMTkV8LK4ZnX71</div>
         </div> : <div></div>}
 
-        <button onClick={onConfirm}>Confirm</button>
+        <button onClick={onConfirm}>Confirm payment</button>
         {isLoading ? <div>Loading...</div> : <div></div>}
         {paymentConfirm ? <div className="valid">Confirm received</div> : <div></div>}
       </div>
