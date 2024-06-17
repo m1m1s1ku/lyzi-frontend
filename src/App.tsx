@@ -9,11 +9,11 @@ enum PaymentMode {
 
 function paymentNameByMode(mode: PaymentMode) {
   switch(mode) {
-    case 0:
+    case PaymentMode.Transfer:
       return "Transfer";
-    case 1:
+    case PaymentMode.Card:
       return "Card";
-    case 2:
+    case PaymentMode.Crypto:
       return "Crypto";
   }
 }
@@ -48,7 +48,7 @@ function App() {
   const onConfirmReceived = (amount: number, mode: PaymentMode) => {
     setFinalPaymentMode(mode);
     setFinalAmount(amount);
-    
+
     // Simulate an API Call
     setTimeout(() => {
       setIsLoading(false);
