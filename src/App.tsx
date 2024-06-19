@@ -2,6 +2,43 @@ import { useState } from 'react'
 import './App.css'
 import { PaymentMode, paymentNameByMode } from './utils/paymentMode';
 
+function AmountForm({invalidAmount, onInput}: {invalidAmount: boolean, onInput: (amount: number) => void}) {
+  return <div className="payment-form">
+  <p>
+    <span>Amount: </span>
+    <input type="number" onInput={(e) => {
+      const amount = parseFloat((e.target as HTMLInputElement).value);
+      onInput(amount);
+    }}></input>€
+    {invalidAmount ? <div className="invalid">Invalid amount</div> : <div></div>}
+  </p>
+</div>
+}
+
+function OptionsForm({amount, paymentMode, onChangeMode}: {amount: number, paymentMode: PaymentMode, onChangeMode: (mode: PaymentMode) => void}) {
+  return <div>
+  <h3>Options :</h3>
+  <div>
+    <button onClick={() => onChangeMode(PaymentMode.Transfer)}>Transfer</button>
+    <button onClick={() => onChangeMode(PaymentMode.Card)}>Card</button>
+    <button onClick={() => onChangeMode(PaymentMode.Crypto)}>Crypto</button>
+  </div>
+  {paymentMode === PaymentMode.Transfer ? <div>
+    <h4>Transfer</h4>
+    <div>Send {amount}€ to FR76 1000 1000 1000 1000</div>
+  </div> : <></>}
+  {paymentMode === PaymentMode.Card ? <div>
+    <h4>Card</h4>
+    <p>Amount : {amount}€</p>
+  </div> : <></>}
+  {paymentMode === PaymentMode.Crypto ? <div>
+    <h4>Crypto</h4>
+    <p>Amount : {amount}€</p>
+    <div>Send to wallet 1Lbcfr7sAHTD9CgdQo3HTMTkV8LK4ZnX71</div>
+  </div> : <></>}
+</div>
+}
+
 
 function App() {
   const [amount, setAmount] = useState(0);
@@ -52,39 +89,15 @@ function App() {
   return (
     <>
       <h1>Lyzi payment</h1>
-      <div className="payment-form">
-        <p>
-          <span>Amount: </span>
-          <input type="number" onInput={(e) => {
-            setPaymentConfirm(false);
-            setInvalidAmount(false);
-            const amount = parseFloat((e.target as HTMLInputElement).value);
-            onInputAmount(amount);
-          }}></input>€
-          {invalidAmount ? <div className="invalid">Invalid amount</div> : <div></div>}
-        </p>
-      </div>
+      <AmountForm invalidAmount={invalidAmount} onInput={(amount: number) => {
+        setInvalidAmount(false);
+        setAmount(amount);
+        onInputAmount(amount);
+      }} />
+      <OptionsForm amount={amount} paymentMode={paymentMode} onChangeMode={(mode: PaymentMode) => {
+        onChangeMode(mode);
+      }} />
       <div>
-        <h3>Options :</h3>
-        <div>
-          <button onClick={() => onChangeMode(PaymentMode.Transfer)}>Transfer</button>
-          <button onClick={() => onChangeMode(PaymentMode.Card)}>Card</button>
-          <button onClick={() => onChangeMode(PaymentMode.Crypto)}>Crypto</button>
-        </div>
-        {paymentMode === PaymentMode.Transfer ? <div>
-          <h4>Transfer</h4>
-          <div>Send {amount}€ to FR76 1000 1000 1000 1000</div>
-        </div> : <div></div>}
-        {paymentMode === PaymentMode.Card ? <div>
-          <h4>Card</h4>
-          <p>Amount : {amount}€</p>
-        </div> : <div></div>}
-        {paymentMode === PaymentMode.Crypto ? <div>
-          <h4>Crypto</h4>
-          <p>Amount : {amount}€</p>
-          <div>Send to wallet 1Lbcfr7sAHTD9CgdQo3HTMTkV8LK4ZnX71</div>
-        </div> : <div></div>}
-
         <button onClick={() => onConfirm(amount, paymentMode)}>Confirm payment</button>
         {isLoading ? <div>Loading...</div> : <div></div>}
         {paymentConfirm ? <div className="valid">Confirm received : {finalAmount}€ by {paymentNameByMode(finalPaymentMode)}</div> : <div></div>}
